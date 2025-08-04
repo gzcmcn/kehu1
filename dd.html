@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- 关键：设置视口适配移动端，禁止用户缩放，让布局更稳定 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>嵌入网站示例</title>
+  <style>
+    /* 重置页面默认的内外边距和盒模型，方便统一控制 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      /* 避免页面本身出现滚动条干扰 iframe 全屏效果 */
+    }
+
+    /* 让 iframe 占满整个页面可视区域 */
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      /* 去掉默认边框 */
+      display: block;
+      /* 消除可能的底部空白间隙 */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 嵌入目标网站，添加 allowfullscreen 以支持可能的全屏操作（如视频全屏等） -->
+  <iframe id="targetIframe" src="https://xiruicq.zquwe.cn/LvAt?user=6d6bf06946847c1f844c34f3e0799aa7&expire=1754290290&appname=bjxrcqfwh" allowfullscreen></iframe>
+
+  <script>
+    // 获取 iframe 元素
+    const iframe = document.getElementById('targetIframe');
+
+    // 监听 iframe 加载完成事件，处理一些跨域允许情况下的高度适配等操作（跨域时部分操作受限）
+    iframe.onload = function () {
+      try {
+        // 尝试获取 iframe 内部文档对象，跨域时会报错，需目标域名配合设置跨域相关头信息才能访问
+        const innerDoc = iframe.contentWindow.document;
+        // 这里可以根据内部文档的实际高度动态调整 iframe 高度，不过在全屏场景下 100vh 一般已足够
+        // 若有特殊需求，比如内部内容高度变化后适配，可结合具体逻辑处理
+        // 示例：iframe.style.height = innerDoc.body.scrollHeight + 'px';
+      } catch (error) {
+        console.warn('由于跨域限制，无法访问 iframe 内部文档信息：', error);
+      }
+    };
+
+    // 处理微信浏览器等环境下可能的特殊情况，比如监听页面 resize 事件，确保 iframe 始终占满屏幕
+    window.addEventListener('resize', function () {
+      iframe.style.width = '100vw';
+      iframe.style.height = '100vh';
+    });
+  </script>
+</body>
+
+</html>
